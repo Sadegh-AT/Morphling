@@ -1,0 +1,17 @@
+{
+  "name": "secret-tears",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "jimp": "^0.22.10",
+    "nodemon": "^3.0.2"
+  }
+}
