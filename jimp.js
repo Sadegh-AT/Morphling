@@ -2,7 +2,7 @@ const jimp = require("jimp");
 
 //? scan image and get all pixels
 async function scanImage() {
-  const image = await jimp.read("./rgb6.png");
+  const image = await jimp.read("./rgb7.jpg");
   let colorArray = [];
   await image.scan(
     0,
@@ -24,7 +24,7 @@ async function scanImage() {
 
 //? It takes an input of rbg type and determines what this color is
 function identifyColor(red, green, blue) {
-  const grayscaleThreshold = 100; // Adjust as needed
+  const grayscaleThreshold = 120; // Adjust as needed
 
   if (red === green && green === blue) {
     if (red < grayscaleThreshold) {
