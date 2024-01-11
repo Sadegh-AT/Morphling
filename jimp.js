@@ -2,7 +2,7 @@ const jimp = require("jimp");
 
 //? scan image and get all pixels
 async function scanImage() {
-  const image = await jimp.read("./rgb3.png");
+  const image = await jimp.read("./rgb6.png");
   let colorArray = [];
   await image.scan(
     0,
@@ -24,12 +24,40 @@ async function scanImage() {
 
 //? It takes an input of rbg type and determines what this color is
 function identifyColor(red, green, blue) {
-  if (red > green && red > blue) {
-    return "\x1b[31m" + "■" + "\x1b[0m";
+  const grayscaleThreshold = 100; // Adjust as needed
+
+  if (red === green && green === blue) {
+    if (red < grayscaleThreshold) {
+      return "\x1b[30m" + "■" + "\x1b[0m";
+    } else if (red > 255 - grayscaleThreshold) {
+      return "\x1b[37m" + "■" + "\x1b[0m";
+    } else {
+      return "\x1b[37m" + "■" + "\x1b[0m";
+    }
+  } else if (red > green && red > blue) {
+    if (green < grayscaleThreshold && blue < grayscaleThreshold) {
+      return "\x1b[31m" + "■" + "\x1b[0m";
+    } else if (blue > green) {
+      return "\x1b[35m" + "■" + "\x1b[0m";
+    } else {
+      return "\x1b[33m" + "■" + "\x1b[0m";
+    }
   } else if (green > red && green > blue) {
-    return "\x1b[32m" + "■" + "\x1b[0m";
+    if (red < grayscaleThreshold && blue < grayscaleThreshold) {
+      return "\x1b[32m" + "■" + "\x1b[0m";
+    } else if (red > blue) {
+      return "\x1b[33m" + "■" + "\x1b[0m";
+    } else {
+      return "\x1b[36m" + "■" + "\x1b[0m";
+    }
   } else if (blue > red && blue > green) {
-    return "\x1b[34m" + "■" + "\x1b[0m";
+    if (red < grayscaleThreshold && green < grayscaleThreshold) {
+      return "\x1b[34m" + "■" + "\x1b[0m";
+    } else if (red > green) {
+      return "\x1b[35m" + "■" + "\x1b[0m";
+    } else {
+      return "\x1b[36m" + "■" + "\x1b[0m";
+    }
   } else {
     return "\x1b[0m";
   }
