@@ -1,30 +1,35 @@
 const jimp = require("jimp");
-
+const imagePath = "./default.png";
 //? scan image and get all pixels
-async function scanImage() {
-  const image = await jimp.read("./rgb7.jpg");
-  let colorArray = [];
-  await image.scan(
-    0,
-    0,
-    image.bitmap.width,
-    image.bitmap.height,
-    function (x, y, idx) {
-      var red = this.bitmap.data[idx + 0];
-      var green = this.bitmap.data[idx + 1];
-      var blue = this.bitmap.data[idx + 2];
-      var alpha = this.bitmap.data[idx + 3];
+async function scanImage(imagePath) {
+  try {
+    const image = await jimp.read(imagePath);
+    imageSizeLimit(image);
+    let colorArray = [];
+    await image.scan(
+      0,
+      0,
+      image.bitmap.width,
+      image.bitmap.height,
+      function (x, y, idx) {
+        var red = this.bitmap.data[idx + 0];
+        var green = this.bitmap.data[idx + 1];
+        var blue = this.bitmap.data[idx + 2];
+        var alpha = this.bitmap.data[idx + 3];
 
-      colorArray.push(identifyColor(red, green, blue));
-    }
-  );
+        colorArray.push(identifyColor(red, green, blue));
+      }
+    );
 
-  createMatrix(image.bitmap.width, image.bitmap.height, colorArray);
+    createMatrix(image.bitmap.width, image.bitmap.height, colorArray);
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 //? It takes an input of rbg type and determines what this color is
 function identifyColor(red, green, blue) {
-  const grayscaleThreshold = 120; // Adjust as needed
+  const grayscaleThreshold = 125; // Adjust as needed
 
   if (red === green && green === blue) {
     if (red < grayscaleThreshold) {
@@ -86,4 +91,11 @@ function displayMatrix(matrix) {
   });
 }
 
-scanImage();
+//! limit for width and height:
+
+async function imageSizeLimit(image) {
+  if (image.bitmap.width > 100 && image.bitmap.height > 100)
+    throw Error("Use a 100x100 pixel image");
+}
+
+scanImage(imagePath);
