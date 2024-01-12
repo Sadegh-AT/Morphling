@@ -1,5 +1,8 @@
 const jimp = require("jimp");
+const fs = require("fs");
+
 const imagePath = "./default.png";
+
 //? scan image and get all pixels
 async function scanImage(imagePath) {
   try {
@@ -29,7 +32,7 @@ async function scanImage(imagePath) {
 
 //? It takes an input of rbg type and determines what this color is
 function identifyColor(red, green, blue) {
-  const grayscaleThreshold = 125; // Adjust as needed
+  const grayscaleThreshold = 50; // Adjust as needed
 
   if (red === green && green === blue) {
     if (red < grayscaleThreshold) {
@@ -97,5 +100,34 @@ async function imageSizeLimit(image) {
   if (image.bitmap.width > 100 && image.bitmap.height > 100)
     throw Error("Use a 100x100 pixel image");
 }
+function delay(milliseconds) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });
+}
 
-scanImage(imagePath);
+async function playVideo() {
+  fs.readdir("./frames", async (err, files) => {
+    if (err) {
+      console.error(`Error reading directory: ${err}`);
+      return;
+    }
+    files = numericSort(files);
+    for (const file of files) {
+      await scanImage(`./frames/${file}`);
+      await delay(10);
+      console.clear();
+    }
+  });
+}
+
+function numericSort(fileNames) {
+  return fileNames.sort((a, b) => {
+    const aNum = parseInt(a.split(".")[0]);
+    const bNum = parseInt(b.split(".")[0]);
+    return aNum - bNum;
+  });
+}
+
+playVideo();
+// scanImage(imagePath);
