@@ -40,7 +40,7 @@ function identifyColor(red, green, blue) {
     } else if (red > 255 - grayscaleThreshold) {
       return "\x1b[37m" + "■" + "\x1b[0m";
     } else {
-      return "\x1b[37m" + "■" + "\x1b[0m";
+      return "\x1b[38;5;244m" + "■" + "\x1b[0m";
     }
   } else if (red > green && red > blue) {
     if (green < grayscaleThreshold && blue < grayscaleThreshold) {
