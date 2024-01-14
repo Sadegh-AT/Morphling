@@ -2,12 +2,12 @@ const jimp = require("jimp");
 const fs = require("fs");
 
 const { spawn } = require("child_process");
-const method = process.argv[2] || "image";
-const sourcePath = process.argv[3] || "./default.png";
+const method = process.argv[2];
+const sourcePath = process.argv[3];
 
-if (method === "image") {
+if (method === "image" && sourcePath) {
   scanImage(sourcePath);
-} else if (method == "video") {
+} else if (method == "video" && sourcePath) {
   const child = spawn("node", ["./frames.js", sourcePath]);
   child.stdout.on("data", (data) => {
     console.log(data.toString());

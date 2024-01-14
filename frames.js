@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const { emit } = require("process");
 
-const inputVideoPath = process.argv[2] || "./default.mp4";
+let inputVideoPath = process.argv[2];
 
 const outputDirectory = "frames";
 const outputVideoProcess = "processed";
@@ -11,7 +11,9 @@ const contrast = 2.5;
 const brightness = 0.2;
 const sharpness = 5;
 const frames = 60;
-
+if (!fs.existsSync(inputVideoPath)) {
+  inputVideoPath = "./default.mp4";
+}
 if (!fs.existsSync(outputDirectory)) {
   fs.mkdirSync(outputDirectory);
 }
