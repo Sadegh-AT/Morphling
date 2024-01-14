@@ -1,7 +1,23 @@
 const jimp = require("jimp");
 const fs = require("fs");
 
-const imagePath = "./default.png";
+const { spawn } = require("child_process");
+const method = process.argv[2] || "image";
+const sourcePath = process.argv[3] || "./default.png";
+
+if (method === "image") {
+  scanImage(sourcePath);
+} else if (method == "video") {
+  const child = spawn("node", ["./frames.js", sourcePath]);
+  child.stdout.on("data", (data) => {
+    console.log(data.toString());
+  });
+  child.on("close", (code) => {
+    playVideo();
+  });
+} else {
+  console.log("Nothing happend..");
+}
 
 //? scan image and get all pixels
 async function scanImage(imagePath) {
@@ -128,6 +144,3 @@ function numericSort(fileNames) {
     return aNum - bNum;
   });
 }
-
-playVideo();
-// scanImage(imagePath);

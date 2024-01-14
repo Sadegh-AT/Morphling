@@ -1,8 +1,10 @@
 const ffmpeg = require("fluent-ffmpeg");
 const fs = require("fs");
 const path = require("path");
+const { emit } = require("process");
 
-const inputVideoPath = "./Interstellar.mp4";
+const inputVideoPath = process.argv[2] || "./default.mp4";
+
 const outputDirectory = "frames";
 const outputVideoProcess = "processed";
 const contrast = 2.5;
@@ -51,6 +53,7 @@ function resizeVideo(inputFilePath, outputWidth, outputHeight) {
       .size(`${outputWidth}x${outputHeight}`)
       .on("end", () => {
         console.log("Video resizing finished");
+
         resolve(outputFilePath);
       })
       .on("error", (err) => {
