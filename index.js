@@ -3,7 +3,7 @@ const fs = require("fs");
 
 const { spawn } = require("child_process");
 const method = process.argv[2];
-const sourcePath = process.argv[3];
+const sourcePath = process.argv[3] || "./default.mp4";
 
 if (method === "image" && sourcePath) {
   scanImage(sourcePath);
